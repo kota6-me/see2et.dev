@@ -46,6 +46,7 @@ body {
 #home-body {
   background-image: url('/public/ciel-background.jpg');
   background-size: cover;
+  background-position: center;
 }
 main {
 	width: 720px;
