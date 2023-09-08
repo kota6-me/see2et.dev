@@ -44,7 +44,7 @@ body {
   height: 100vh;
 }
 #home-body {
-  background-image: url('/public/ciel-background.jpg');
+  background-image: url('/ciel-background.jpg');
   background-size: cover;
   background-position: center;
 }
