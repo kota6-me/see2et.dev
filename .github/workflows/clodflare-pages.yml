@@ -12,7 +12,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
+      - uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x
+      - name: Building Pages
+        run: cloudflare-pages-with-github-actions-prac
       - name: Publish to Cloudflare Pages
         id: cloudflare_pages_deploy
         uses: cloudflare/pages-action@1
@@ -22,7 +26,6 @@ jobs:
           projectName: see2et-dev
           directory: /dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Add publish URL as commit status
         uses: actions/github-script@v6
         with:
