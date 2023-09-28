@@ -1,46 +1,21 @@
-on: [push]
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  publish:
-    runs-on: ubuntu-20.04
-    permissions:
-      contents: read
-      deployments: write
-      statuses: write
-
-    name: Publish to Cloudflare Pages
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - uses: actions/setup-node@v3.8.1
+      - uses: actions/checkout@v2
+      - name: Install, build, and upload your site
+        uses: withastro/action@v1.0.3
+      - name: Publish
+        uses: cloudflare/wrangler-action@2.0.0
         with:
-          node-version: 18.14.1
-      - name: Installing Packages
-        run: npm install
-      - name: Building Pages
-        run: npm run build
-      - name: Publish to Cloudflare Pages
-        id: cloudflare_pages_deploy
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: see2et-dev
-          directory: /dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add publish URL as commit status
-        uses: actions/github-script@v6
-        with:
-          script: |
-            // When "pull_request", context.payload.pull_request?.head.sha is expected SHA.
-            // (base: https://github.community/t/github-sha-isnt-the-value-expected/17903/2)
-            const sha = context.payload.pull_request?.head.sha ?? context.sha;
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              context: 'Cloudflare Pages',
-              description: 'Cloudflare Pages deployment',
-              state: 'success',
-              sha,
-              target_url: "${{ steps.cloudflare_pages_deploy.outputs.url }}",
-            });
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages publish --project-name=${{ secrets.CF_PROJECT_NAME }} ./dist
