@@ -15,8 +15,9 @@ jobs:
       - uses: actions/setup-node@v3.4.1
         with:
           node-version: 16.x
-      - name: Building Pages
+      - name: Installing Packages
         run: npm install
+      - name: Building Pages
         run: npm run build
       - name: Publish to Cloudflare Pages
         id: cloudflare_pages_deploy
