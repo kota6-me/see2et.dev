@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 16.x
       - name: Building Pages
-        run: cloudflare-pages-with-github-actions-prac
+        run: npm run build
       - name: Publish to Cloudflare Pages
         id: cloudflare_pages_deploy
         uses: cloudflare/pages-action@1
